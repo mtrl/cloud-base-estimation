@@ -145,10 +145,14 @@ def calc_cloudbase_height(dewpoint, max_day_temp):
 # alongside observed data from actual flights
 if __name__ == "__main__":
     # Get data from API
-    lat = sys.argv[1] if len(sys.argv) > 1 else "52.5189846"
-    lng = sys.argv[2] if len(sys.argv) > 1 else "-2.8909141"
+    if len(sys.argv) > 1:
+        api_key = sys.argv[1]
+    else:
+        sys.exit()
+    lat = sys.argv[2] if len(sys.argv) > 2 else "52.5189846"
+    lng = sys.argv[3] if len(sys.argv) > 3 else "-2.8909141"
 
-    url = "https://api.darksky.net/forecast/e8848df565e76b6eeb0e2cde6883be5b/{0},{1}?exclude=minutely,hourly,flags".format(lat,lng)
+    url = "https://api.darksky.net/forecast/{0}/{1},{2}?exclude=minutely,hourly,flags".format(api_key, lat, lng)
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     min_temp = fahrenheit_to_celsius(data["daily"]["data"][0]["temperatureMin"])
