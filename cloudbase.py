@@ -55,7 +55,7 @@ if __name__ == "__main__":
     print "+-----------------------------------------+"
     print " Estimated cloud base: {0} feet".format(int(cloud_base))
     print " Min. temp:            {:.1f}°C".format(min_temp)
-    print " Max. temp:            {:.1f}°C".format(min_temp)
+    print " Max. temp:            {:.1f}°C".format(max_temp)
     print " Humidity:             {:.0f}%".format(humidity)
     print " Dew point temp:       {:.1f}°C".format(dewpoint_temp)
     print "+-----------------------------------------+"
