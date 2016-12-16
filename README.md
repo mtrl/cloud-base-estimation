@@ -1,5 +1,8 @@
 # CloudBase.py
 
+A simple python script for estimating forecast cloud base for a location.
+
+# Instructions for use
 1. Clone this repo
 1. Install the requirements `pip install -r requirements.txt`
 1. Get a DarkSkies API key from (https://darksky.net/dev/)[https://darksky.net/dev/]
