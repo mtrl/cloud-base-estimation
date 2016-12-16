@@ -2,14 +2,14 @@
 
 A simple python script for estimating forecast cloud base for a location.
 
+!['Screenshot of python script output'](cloudbase.jpg)
+
 # Instructions for use
 1. Clone this repo
 1. Install the requirements `pip install -r requirements.txt`
 1. Get a DarkSkies API key from (https://darksky.net/dev/)[https://darksky.net/dev/]
 1. Run the script with `python cloudbase.py [API Key] [lat] [lng]` e.g.
 `python cloudbase.py myapikeymyapikeymyapikey 52.518342 -2.871176`
-
-!['Screenshot of python script output'](cloudbase.jpg)
 
 # Future Cloud Base Forecast
 To get cloud base forecasts for future dates, add an optional day argument to the
