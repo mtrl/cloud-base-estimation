@@ -41,21 +41,23 @@ if __name__ == "__main__":
     response = urllib.urlopen(url)
     data = json.loads(response.read())
     day_data = data["daily"]["data"][day]
-    min_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMin"])
     timestamp = day_data["time"]
-    utc_time = datetime.fromtimestamp(timestamp)
-
-    max_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMax"])
     humidity = day_data["humidity"] * 100
-    dewpoint_temp = dewpoint_approximation(min_temp, humidity)
-    cloud_base = calc_cloudbase_height(dewpoint_temp, max_temp)
+    dew_point = weatherunitstemp.fahrenheit_to_celsius(day_data["dewPoint"])
+    # min_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMin"])
+    max_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMax"])
+    # mean_temp = (max_temp + min_temp) / 2
+
+    utc_time = datetime.fromtimestamp(timestamp)
+    # dewpoint_temp = dewpoint_approximation(mean_temp, humidity)
+    cloud_base = calc_cloudbase_height(dew_point, max_temp)
 
     print "+-----------------------------------------+"
     print("| Cloud base forecast for {0} |".format(utc_time.strftime("%a %m %b %Y")))
     print "+-----------------------------------------+"
-    print " Estimated cloud base: {0} feet".format(int(cloud_base))
-    print " Min. temp:            {:.1f}°C".format(min_temp)
-    print " Max. temp:            {:.1f}°C".format(max_temp)
+    print " Estimated cloud base: {0} feet AGL".format(int(cloud_base))
+    # print " Mean. temp:            {:.1f}°C".format(mean_temp)
+    print " Maximum temperature:  {:.1f}°C".format(max_temp)
     print " Humidity:             {:.0f}%".format(humidity)
-    print " Dew point temp:       {:.1f}°C".format(dewpoint_temp)
+    print " Dew point:            {:.1f}°C".format(dew_point)
     print "+-----------------------------------------+"
