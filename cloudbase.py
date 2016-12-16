@@ -1,5 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys, math, urllib, json
+from datetime import datetime
 import weatherunitstemp
 import numpy as np
 
@@ -40,13 +42,20 @@ if __name__ == "__main__":
     data = json.loads(response.read())
     day_data = data["daily"]["data"][day]
     min_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMin"])
-    print "Min forecast temperature for the day is {0}C".format(min_temp)
+    timestamp = day_data["time"]
+    utc_time = datetime.fromtimestamp(timestamp)
+
+    print "+-----------------------------------------+"
+    print("| Cloud base forecast for {0} |".format(utc_time.strftime("%a %m %b %Y")))
+    print "+-----------------------------------------+"
+
+    print "Min. temp:            {:.1f}°C".format(min_temp)
     max_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMax"])
-    print "Max forecast temperature for the day is {0}C".format(min_temp)
+    print "Max. temp:            {:.1f}°C".format(min_temp)
     humidity = day_data["humidity"] * 100
-    print "Humidity is {0}%".format(humidity)
+    print "Humidity:             {:.0f}%".format(humidity)
     dewpoint_temp = dewpoint_approximation(min_temp, humidity)
-    print "Dewpoint temperature is {0} Celsius".format(dewpoint_temp)
+    print "Dew point temp:       {:.1f}°C".format(dewpoint_temp)
     # Calc cloud base
     cloud_base = calc_cloudbase_height(dewpoint_temp, max_temp)
-    print "Cloud base is estimated to be {0} foot".format(cloud_base)
+    print "Estimated cloud base: {0} feet".format(int(cloud_base))
