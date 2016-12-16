@@ -8,7 +8,7 @@
 # -Christopher Blunck
 #
 
-import sys, math
+import sys, math, urllib, json
 import numpy as np
 
 
@@ -144,9 +144,17 @@ def calc_cloudbase_height(dewpoint, max_day_temp):
 # Tested using data from https://www.wunderground.com/history/airport/EGOS/2016/11/18/DailyHistory.html?req_city=Shrewsbury&req_state=SHR&req_statename=United+Kingdom&reqdb.zip=00000&reqdb.magic=135&reqdb.wmo=03414
 # alongside observed data from actual flights
 if __name__ == "__main__":
-    mean_temp = 14
-    max_temp = 18
-    dewpoint_temp = dewpoint_approximation(mean_temp, 74)
+    # Get data from API
+    url = "https://api.darksky.net/forecast/e8848df565e76b6eeb0e2cde6883be5b/52.5189846,-2.8909141?exclude=minutely,hourly,flags"
+    response = urllib.urlopen(url)
+    data = json.loads(response.read())
+    min_temp = fahrenheit_to_celsius(data["daily"]["data"][0]["temperatureMin"])
+    print "Min forecast temperature for the day is {0}C".format(min_temp)
+    max_temp = fahrenheit_to_celsius(data["daily"]["data"][0]["temperatureMax"])
+    print "Max forecast temperature for the day is {0}C".format(min_temp)
+    humidity = data["daily"]["data"][0]["humidity"] * 100
+    print "Humidity is {0}%".format(humidity)
+    dewpoint_temp = dewpoint_approximation(min_temp, humidity)
     print "Dewpoint temperature is {0} Celsius".format(dewpoint_temp)
     # Calc cloud base
     cloud_base = calc_cloudbase_height(dewpoint_temp, max_temp)
