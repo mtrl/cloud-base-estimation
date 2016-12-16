@@ -45,17 +45,17 @@ if __name__ == "__main__":
     timestamp = day_data["time"]
     utc_time = datetime.fromtimestamp(timestamp)
 
+    max_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMax"])
+    humidity = day_data["humidity"] * 100
+    dewpoint_temp = dewpoint_approximation(min_temp, humidity)
+    cloud_base = calc_cloudbase_height(dewpoint_temp, max_temp)
+
     print "+-----------------------------------------+"
     print("| Cloud base forecast for {0} |".format(utc_time.strftime("%a %m %b %Y")))
     print "+-----------------------------------------+"
-
-    print "Min. temp:            {:.1f}°C".format(min_temp)
-    max_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMax"])
-    print "Max. temp:            {:.1f}°C".format(min_temp)
-    humidity = day_data["humidity"] * 100
-    print "Humidity:             {:.0f}%".format(humidity)
-    dewpoint_temp = dewpoint_approximation(min_temp, humidity)
-    print "Dew point temp:       {:.1f}°C".format(dewpoint_temp)
-    # Calc cloud base
-    cloud_base = calc_cloudbase_height(dewpoint_temp, max_temp)
-    print "Estimated cloud base: {0} feet".format(int(cloud_base))
+    print " Estimated cloud base: {0} feet".format(int(cloud_base))
+    print " Min. temp:            {:.1f}°C".format(min_temp)
+    print " Max. temp:            {:.1f}°C".format(min_temp)
+    print " Humidity:             {:.0f}%".format(humidity)
+    print " Dew point temp:       {:.1f}°C".format(dewpoint_temp)
+    print "+-----------------------------------------+"
