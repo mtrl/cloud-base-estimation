@@ -55,8 +55,8 @@ if __name__ == "__main__":
     print "+-----------------------------------------+"
     print("| Cloud base forecast for {0} |".format(utc_time.strftime("%a %m %b %Y")))
     print "+-----------------------------------------+"
-    print " Estimated cloud base:  {0} feet AGL".format(int(cloud_base))
-    print " Maximum temperature:   {:.1f}°C".format(max_temp)
-    print " Dew point temperature: {:.1f}°C".format(dew_point)
-    print " Humidity:              {:.0f}%".format(humidity)
+    print " Estimated cloud base:        {0} ft AGL".format(int(cloud_base))
+    print " Maximum temperature:         {:.1f}°C".format(max_temp)
+    print " Dew point temperature:       {:.1f}°C".format(dew_point)
+    print " Humidity:                    {:.0f}%".format(humidity)
     print "+-----------------------------------------+"
