@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys, math, urllib, json
+import sys, math, urllib, json, plotly
+import plotly.plotly as py
+from plotly.graph_objs import *
 from datetime import datetime
 import weatherunitstemp
 import numpy as np
@@ -36,12 +38,9 @@ def day_forecast(lat, lng, day):
     timestamp = day_data["time"]
     humidity = day_data["humidity"] * 100
     dew_point = weatherunitstemp.fahrenheit_to_celsius(day_data["dewPoint"])
-    # min_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMin"])
     max_temp = weatherunitstemp.fahrenheit_to_celsius(day_data["temperatureMax"])
-    # mean_temp = (max_temp + min_temp) / 2
 
     utc_time = datetime.fromtimestamp(timestamp)
-    # dewpoint_temp = dewpoint_approximation(mean_temp, humidity)
     cloud_base = calc_cloudbase_height(dew_point, max_temp)
 
     print "+-----------------------------------------+"
@@ -63,6 +62,8 @@ def hourly_forecast(lat, lng):
     print "| Hourly cloud base forecast              |"
     print "+-----------------------------------------+"
 
+    y_vals = []
+    x_vals = []
     for hour in hourly_data:
         timestamp = hour["time"]
         humidity = hour["humidity"] * 100
@@ -72,7 +73,29 @@ def hourly_forecast(lat, lng):
         utc_time = datetime.fromtimestamp(timestamp)
         cloud_base = calc_cloudbase_height(dew_point, temp)
 
-        print "{0}  {1} ft AGL".format(utc_time.strftime("%a @ %H:%M"), int(cloud_base))
+        nice_time = int(utc_time.strftime("%Y%m%d%H%M"))
+
+        y_vals.append(cloud_base)
+        x_vals.append(utc_time)
+
+        print "{0} {1} ft AGL".format(nice_time, int(cloud_base))
+
+    return x_vals, y_vals
+
+def graph_cloud_base(x, y):
+    trace0 = Scatter(
+        x=x,
+        y=y
+    )
+
+    data = Data([trace0])
+    layout = dict(title = 'Estimated cloud base for {0}, {1}'.format(lat, lng),
+              xaxis = dict(title = 'Day'),
+              yaxis = dict(title = 'Estimated cloud base (Feet)'),
+              )
+    fig = dict(data = data, layout = layout)
+    py.iplot(fig, filename = 'basic-line')
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -83,6 +106,12 @@ if __name__ == "__main__":
     lng = sys.argv[3] if len(sys.argv) > 3 else "-2.8909141"
     day = sys.argv[4] if len(sys.argv) > 4 else 0
     if day == "hourly":
-        hourly_forecast(lat=lat, lng=lng)
+        x, y = hourly_forecast(lat=lat, lng=lng)
+        # Do we have a plotly username and API key?
+        if len(sys.argv) > 6:
+            plotly_user = sys.argv[5]
+            plotly_key = sys.argv[6]
+            plotly.tools.set_credentials_file(username=plotly_user, api_key=plotly_key)
+            graph_cloud_base(x, y)
     else:
         day_forecast(lat=lat, lng=lng, day=day)
