@@ -41,3 +41,8 @@ e.g. `python cloudbase.py [Dark Sky API Key] [lat] [lng] hourly mark d9asABB0swR
 ##Thanks
 [Christopher Blunck](http://pydoc.net/Python/weather/0.9.1/weather.units.temp/)
 for the temperature conversion functions I've used in this script.
+
+## Disclaimer
+The information provided by this script should not be used for flight planning or safety. The maths and
+methods used to estimate cloud here are shaky at best. Local cloud base is determined by much more than
+dew point and ALR.
